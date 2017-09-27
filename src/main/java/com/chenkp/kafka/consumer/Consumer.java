@@ -12,14 +12,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
-@Component
-public class Consumer implements MessageListener<Integer, String>{
+/**
+ * Chenkp
+ * 消费者，@KafkaListener 监听消息
+ */
 
-    @KafkaListener(topics = {"test-topic"})
-    @Override
-    public void onMessage(ConsumerRecord<Integer, String> record) {
-        Object result = record.value();
+@Component
+public class Consumer{
+
+    @KafkaListener(topics = {"test_topic"})
+    public void onMessage(String record) {
+//        Object result = record.value();
         System.out.println("收到的消息："+record);
-        System.out.println("收到的消息："+result);
+//        System.out.println("收到的消息："+result);
     }
 }
