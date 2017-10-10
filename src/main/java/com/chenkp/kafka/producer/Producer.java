@@ -27,13 +27,18 @@ public class Producer {
 //        Map<String, String> map = new HashMap<>();
 //        map.put("key1", "value1");
 //        map.put("key2", "value2");
-        ListenableFuture<SendResult<String, Object>> result = kafkaTemplate.send("test_topic", "This is my message!");
-        SendResult<String, Object> sendResult = result.get();
-        ProducerRecord<String, Object> producerRecord = sendResult.getProducerRecord();
-        RecordMetadata recordMetadata = sendResult.getRecordMetadata();
+        long time1 = System.currentTimeMillis();
+        for(int i=1;i<=5000;i++){
+            ListenableFuture<SendResult<String, Object>> result = kafkaTemplate.send("aaa", String.valueOf(i));
+            SendResult<String, Object> sendResult = result.get();
+            ProducerRecord<String, Object> producerRecord = sendResult.getProducerRecord();
+            RecordMetadata recordMetadata = sendResult.getRecordMetadata();
 
-        boolean flag = result.isDone();
-        System.err.println("发送成功!!!");
-        return flag;
+            boolean flag = result.isDone();
+        }
+        long time2 = System.currentTimeMillis();
+        long time = time2-time1;
+        System.err.println("发送成功。使用时间："+time);
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package com.chenkp.kafka.consumer;
 
 
+import com.chenkp.kafka.thread.AsyncTask;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,10 +21,26 @@ import org.springframework.util.concurrent.ListenableFuture;
 @Component
 public class Consumer{
 
-    @KafkaListener(topics = {"test_topic"})
-    public void onMessage(String record) {
-//        Object result = record.value();
-        System.out.println("收到的消息："+record);
-//        System.out.println("收到的消息："+result);
+    @Autowired
+    private AsyncTask asyncTask;
+
+//    @KafkaListener(topics = {"test_topic"})
+//    public void onMessage(String record) {
+//        System.out.println("收到的消息："+record);
+//    }
+
+    @KafkaListener(topics = {"aaa"})
+    public void onMessage(ConsumerRecord<?, ?> record){
+//        System.out.println("收到的topic："+record.topic());
+//        System.out.println("收到的key："+record.key());
+//        System.out.println("收到的partitioner："+record.partition());
+//        System.out.println("收到的offset："+record.offset());
+        System.out.println("收到的value："+record.value().toString());
+        try {
+            asyncTask.doTask(record);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        System.err.println("接受结束");
     }
 }
